@@ -14,6 +14,7 @@ func main() {
   e := echo.New()
   e.GET("/hello", Greetings)
 	e.GET("/hello/:name", GreetingsWithParams)
+	e.GET("/hello-queries", GreetingsWithQuery)
   e.Logger.Fatal(e.Start(":3000"))
 }
 
@@ -32,4 +33,13 @@ func GreetingsWithParams(c echo.Context) error {
   return c.JSON(http.StatusOK, HelloWorld{
     Message: "Hello World, my name is " + params,
   })
+}
+
+//http://localhost:3000/hello-queries?name=Saumit
+//{"message":"Hello World, I'm using queries and my name is Saumit"}
+func GreetingsWithQuery(c echo.Context) error {
+	query := c.QueryParam("name")
+	return c.JSON(http.StatusOK, HelloWorld{
+		Message: "Hello World, I'm using queries and my name is " + query,
+	})
 }
