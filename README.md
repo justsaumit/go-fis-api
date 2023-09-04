@@ -1,5 +1,6 @@
 # Golang Backend API using Echo for FSI(File System Integrity) Application
-Developing a simple Golang backend API using the [Echo framework](https://github.com/labstack/echo). This API stores IDs and their corresponding hashes in a SQL server and provides functionality to verify if a given hash matches the stored hash for a specific ID, thereby providing integrity service that aligns with the CIA (Confidentiality, Integrity, Availability) triad for data security.
+Developing a simple Golang backend API using the [Echo framework](https://github.com/labstack/echo). This API stores IDs and their corresponding hashes in a SQL server and provides functionality to verify if a given hash matches the stored hash for a specific ID. All the communication between the Application and API will secured using TLS encryption(HTTPS).  
+Thereby providing both confidentiality and integrity service that aligns with the CIA (Confidentiality, Integrity, Availability) triad for data security.
 
 ## Getting Started
 
@@ -39,6 +40,13 @@ Once the server is running, you can access the API endpoints to add file hashes 
 
 - To add a file hash, make a POST request to `/add` with JSON data containing the ID and hash.
 - To verify a file hash, make a POST request to `/verify` with JSON data containing the ID and hash.
+
+## To-Do-List
+- [x] Perform short ID Generation (API/Application)
+- [ ] Perform Hashing (API/Application)
+- [ ] Connect with DB
+- [ ] Add JSON data to DB
+- [ ] Perform verification
 
 ## License
 
