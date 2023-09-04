@@ -1,4 +1,4 @@
-module github.com/justsaumit/fis-golang
+module github.com/justsaumit/go-fic-api
 
 go 1.21.0
 

@@ -6,7 +6,7 @@ import (
   "github.com/labstack/echo/v4"
 
   "fmt"
-  "github.com/justsaumit/fis-golang/idgen"
+  "github.com/justsaumit/go-fic-api/idgen"
 )
 
 type HelloWorld struct {
