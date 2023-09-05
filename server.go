@@ -7,6 +7,7 @@ import (
 
   "fmt"
   "github.com/justsaumit/go-fic-api/idgen"
+  "github.com/justsaumit/go-fic-api/hasher"
 )
 
 type HelloWorld struct {
@@ -19,6 +20,10 @@ func main() {
 	e.GET("/hello/:name", GreetingsWithParams)
 	e.GET("/hello-queries", GreetingsWithQuery)
   e.GET("/genid", GenerateIDHandler)
+  e.GET("/hasher", hasherHandler)
+  e.GET("/", func(c echo.Context) error {
+    return c.String(http.StatusOK, "Hello, World!")
+  })
   e.Logger.Fatal(e.Start(":3000"))
 }
 
@@ -42,7 +47,6 @@ func GreetingsWithQuery(c echo.Context) error {
 	})
 }
 
-
 func GenerateIDHandler(c echo.Context) error {
     id := idgen.GenerateID()
     //Print the generated ID to the console.
@@ -51,4 +55,13 @@ func GenerateIDHandler(c echo.Context) error {
     //  return c.JSON(http.StatusOK, HelloWorld{
     //  Message: "Generated ID: " + id,
     //})
+}
+
+func hasherHandler(c echo.Context) error {
+	filePath := "./message-orig.txt"
+	hash, err := hasher.CalculateBLAKE2Hash(filePath)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "Error calculating hash")
+	}
+	return c.String(http.StatusOK, fmt.Sprintf("BLAKE2b hash of %s: %s\n", filePath, hash))
 }
