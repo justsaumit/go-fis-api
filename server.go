@@ -58,10 +58,25 @@ func GenerateIDHandler(c echo.Context) error {
 }
 
 func hasherHandler(c echo.Context) error {
-	filePath := "./message-orig.txt"
-	hash, err := hasher.CalculateBLAKE2Hash(filePath)
-	if err != nil {
-		return c.String(http.StatusInternalServerError, "Error calculating hash")
-	}
-	return c.String(http.StatusOK, fmt.Sprintf("BLAKE2b hash of %s: %s\n", filePath, hash))
+  filePaths := []string{
+    "./message-orig.txt",
+    "./message-copy.txt",
+    "./message-modd.txt",
+  }
+  hashResults := make(map[string]string)
+
+  for _, filePath := range filePaths {
+      hash, err := hasher.CalculateBLAKE2Hash(filePath)
+      if err != nil {
+          return c.String(http.StatusInternalServerError, "Error calculating hash")
+      }
+      hashResults[filePath] = hash
+  }
+
+  response := "BLAKE2b hashes:\n"
+  for filePath, hash := range hashResults {
+      response += fmt.Sprintf("%s: %s\n", filePath, hash)
+  }
+
+  return c.String(http.StatusOK, response)
 }
