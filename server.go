@@ -1,63 +1,65 @@
 package main
 
 import (
-	"net/http"
+	"log"
 
-	"github.com/labstack/echo/v4"
+	"github.com/gofiber/fiber/v2"
 
 	"fmt"
+
 	"github.com/justsaumit/go-fic-api/hasher"
 	"github.com/justsaumit/go-fic-api/idgen"
 )
 
-type HelloWorld struct {
-	Message string `json:"message"`
-}
+// type HelloWorld struct {
+// 	Message string `json:"message"`
+// }
 
 func main() {
-	e := echo.New()
-	e.GET("/hello", Greetings)
-	e.GET("/hello/:name", GreetingsWithParams)
-	e.GET("/hello-queries", GreetingsWithQuery)
-	e.GET("/genid", GenerateIDHandler)
-	e.GET("/hasher", hasherHandler)
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
+	app := fiber.New()
+
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.SendString("Hello, World 👋!")
 	})
-	e.Logger.Fatal(e.Start(":3000"))
+
+	app.Get("/hello", Greetings)
+	app.Get("/hello/:name", GreetingsWithParams)
+	app.Get("/hello-queries", GreetingsWithQueries)
+	app.Get("/genid", GenerateIdHandler)
+	app.Get("/hasher", hasherHandler)
+
+	log.Fatal(app.Listen(":3000"))
 }
 
-func Greetings(c echo.Context) error {
-	return c.JSON(http.StatusOK, HelloWorld{
-		Message: "Hello World",
-	})
-}
-
-func GreetingsWithParams(c echo.Context) error {
-	params := c.Param("name")
-	return c.JSON(http.StatusOK, HelloWorld{
-		Message: "Hello World, my name is " + params,
+func Greetings(c *fiber.Ctx) error {
+	return c.JSON(fiber.Map{
+		"message": "Hello, World",
 	})
 }
 
-func GreetingsWithQuery(c echo.Context) error {
-	query := c.QueryParam("name")
-	return c.JSON(http.StatusOK, HelloWorld{
-		Message: "Hello World, I'm using queries and my name is " + query,
+func GreetingsWithParams(c *fiber.Ctx) error {
+	params := c.Params("name")
+	return c.JSON(fiber.Map{
+		"message": "Hello World, my name is " + params,
 	})
 }
 
-func GenerateIDHandler(c echo.Context) error {
+func GreetingsWithQueries(c *fiber.Ctx) error {
+	queries := c.Query("name")
+	return c.JSON(fiber.Map{
+		"message": "Hello World, I am using Queries and my name is " + queries,
+	})
+}
+
+func GenerateIdHandler(c *fiber.Ctx) error {
 	id := idgen.GenerateID()
-	//Print the generated ID to the console.
-	fmt.Println("Generated ID:", id)
-	return c.JSON(http.StatusOK, map[string]string{"message": "Generated ID: " + id})
-	//  return c.JSON(http.StatusOK, HelloWorld{
-	//  Message: "Generated ID: " + id,
-	//})
+	fmt.Println("Generated ID: " + id)
+	return c.JSON(fiber.Map{
+		"id": "Generated ID:" + id,
+	})
 }
 
-func hasherHandler(c echo.Context) error {
+func hasherHandler(c *fiber.Ctx) error {
 	filePaths := []string{
 		"./message-orig.txt",
 		"./message-copy.txt",
@@ -68,15 +70,16 @@ func hasherHandler(c echo.Context) error {
 	for _, filePath := range filePaths {
 		hash, err := hasher.CalculateBLAKE2Hash(filePath)
 		if err != nil {
-			return c.String(http.StatusInternalServerError, "Error calculating hash")
+			return c.SendString("Error calculating hash")
 		}
 		hashResults[filePath] = hash
 	}
 
-	response := "BLAKE2b hashes:\n"
+	response := "BLAKE@ Hash Results: \n"
 	for filePath, hash := range hashResults {
-		response += fmt.Sprintf("%s: %s\n", filePath, hash)
+		response += filePath + ": " + hash + "\n"
 	}
 
-	return c.String(http.StatusOK, response)
+	return c.SendString(response)
+
 }
