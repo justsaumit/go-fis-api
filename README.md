@@ -1,5 +1,6 @@
 # Golang Backend API for FIS (File Integrity Surveillance) Application
-Developing a simple Golang backend API with the [Echo framework](https://github.com/labstack/echo) for FIS(File Integrity Surveillance) application which can be found [here](https://github.com/ayato91/Fair-Files). This API stores IDs and their corresponding hashes in a SQL server and provides functionality to verify if a given hash matches the stored hash for a specific ID. All the communication between the Application and API is secured using TLS encryption(HTTPS).  
+Developing a simple Golang backend API with the [Echo framework](https://github.com/labstack/echo) for FIS(File Integrity Surveillance) application which can be found [here](https://github.com/ayato91/Fair-Files).  
+This API stores IDs and their corresponding hashes in a SQL server and provides functionality to verify if a given hash matches the stored hash for a specific ID. All the communication between the Application and API is secured using TLS encryption(HTTPS).  
 Thereby providing both confidentiality and integrity service that aligns with the CIA (Confidentiality, Integrity, Availability) triad for data security.
 
 ## Getting Started
@@ -38,8 +39,18 @@ To get started with this project, follow these steps:
 
 Once the server is running, you can access the API endpoints to add file hashes and verify them.
 
-- To add a file hash, make a POST request to `/add` with JSON data containing the ID and hash.
-- To verify a file hash, make a POST request to `/verify` with JSON data containing the ID and hash.
+- To add a file hash, make a POST request to `/upload` by uploading the file using multipart form, an generated ID and hash would be returned.
+- To verify a file hash, make a POST request to `/verify` with previously generated ID and the file, a JSON message with Hashes matching or not will be recieved as response .
+
+### Usage
+
+Once the server is operational, you can interact with the API endpoints to add and verify file hashes.
+
+- **Adding a File Hash:**
+  - To add a file hash, send a POST request to the `/upload` endpoint. You'll need to upload the file using multipart/form-data. The server will generate an ID and a hash for the uploaded file, which will be returned in the response.
+
+- **Verifying a File Hash:**
+  - To verify a file hash, send a POST request to the `/verify` endpoint. Include the previously generated ID as a form field and upload the file using multipart/form-data. The server will respond with a JSON message indicating whether the hash of the uploaded file matches the stored hash for the given ID.
 
 ## To-Do-List
 - [x] Handle Uploaded files (API)
@@ -47,7 +58,7 @@ Once the server is running, you can access the API endpoints to add file hashes 
 - [x] Perform Hashing (API)
 - [x] Connect with DB
 - [x] Store JSON data to DB
-- [ ] Perform verification
+- [x] Perform verification
 
 ## License
 
