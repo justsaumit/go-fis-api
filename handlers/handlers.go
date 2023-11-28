@@ -107,6 +107,7 @@ func VerifyHash(c echo.Context) error {
 	err = db.QueryRow("SELECT HashValue FROM hashes WHERE ID = ?", id).Scan(&storedHash)
 	if err != nil {
 		if err == sql.ErrNoRows {
+			log.Println("ID not Found")
 			return c.JSON(http.StatusNotFound, map[string]string{"message": "2"})
 		}
 		log.Println("Failed to query database:", err)
