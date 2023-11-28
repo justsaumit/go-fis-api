@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Verification Test</title>
+</head>
+<body>
+    <h1>File Verification Test</h1>
+    <form action="https://draconyan.xyz:3000/verify" method="post" enctype="multipart/form-data">
+        <label for="idInput">Enter ID:</label>
+        <input type="text" id="idInput" name="idInput" required><br><br>
+        <label for="FileInput">Choose file to verify:</label>
+        <input type="file" id="FileInput" name="FileInput" required><br><br>
+        <button type="submit">Verify File</button>
+    </form>
+</body>
+</html>
