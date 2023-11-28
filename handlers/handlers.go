@@ -34,17 +34,19 @@ func init() {
 
 // AddHash handles the file upload, store and response
 func AddHash(c echo.Context) error {
-	file, err := c.FormFile("file")
+	file, err := c.FormFile("FileInput")
 	if err != nil {
 		log.Println("Failed to bind request:", err)
 		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid request"})
 	}
 
+	// Open the file stream
 	src, err := file.Open()
 	if err != nil {
 		log.Println("Failed to Open File", err)
 		return err
 	}
+	// Close the file stream on function exit
 	defer src.Close()
 
 	id, err := utils.GenerateID()
@@ -70,4 +72,52 @@ func AddHash(c echo.Context) error {
 
 	log.Println("Hash added successfully to the database")
 	return c.JSON(http.StatusOK, data)
+}
+
+// VerifyHash handles the file verification and response
+
+func VerifyHash(c echo.Context) error {
+	// Extract the ID from the request
+        id := c.FormValue("idInput")
+
+	// Handle file upload
+	file, err := c.FormFile("FileInput")
+	if err != nil {
+		log.Println("Failed to bind request:", err)
+		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid request"})
+	}
+
+	// Open the file stream
+	src, err := file.Open()
+	if err != nil {
+		log.Println("Failed to Open File", err)
+		return err
+	}
+	// Close the file stream on function exit
+	defer src.Close()
+
+	// Generate hash of the uploaded file
+	hash, err := utils.GenerateHash(src)
+	if err != nil {
+		log.Println("Failed to Generate Hash", err)
+	}
+
+	// Retrieve the stored hash from the database
+	var storedHash string
+	err = db.QueryRow("SELECT HashValue FROM hashes WHERE ID = ?", id).Scan(&storedHash)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return c.JSON(http.StatusNotFound, map[string]string{"message": "ID not found"})
+		}
+		log.Println("Failed to query database:", err)
+		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to retrieve stored hash"})
+	}
+
+	// Compare the generated hash with the stored hash
+	if hash != storedHash {
+		log.Println("Hash verification failed")
+		return c.JSON(http.StatusUnauthorized, map[string]string{"message": "Hash verification failed"})
+	}
+	log.Println("Hash verified successfully")
+	return c.JSON(http.StatusOK, map[string]string{"message": "Hash verified successfully"})
 }
