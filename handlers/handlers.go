@@ -58,18 +58,16 @@ func AddHash(c echo.Context) error {
 	}
 
 	// Store id and hash in the database
-	_, err := db.Exec("INSERT INTO hashes (ID, HashValue) VALUES (?, ?)", id, hash)
+	_, err = db.Exec("INSERT INTO hashes (ID, HashValue) VALUES (?, ?)", id, hash)
 	if err != nil {
 		log.Println("Failed to insert into database:", err)
-		//return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to store hash"})
 	}
-	//return c.JSON(http.StatusOK, map[string]string{"id": id, "message": "Hash added successfully"})
 
 	data := models.FileHashPair{
 		ID:       id,
 		FileHash: hash,
 	}
 
-	log.Println("Hash added successfully")
+	log.Println("Hash added successfully to the database")
 	return c.JSON(http.StatusOK, data)
 }
