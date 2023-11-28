@@ -107,7 +107,7 @@ func VerifyHash(c echo.Context) error {
 	err = db.QueryRow("SELECT HashValue FROM hashes WHERE ID = ?", id).Scan(&storedHash)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return c.JSON(http.StatusNotFound, map[string]string{"message": "ID not found"})
+			return c.JSON(http.StatusNotFound, map[string]string{"message": "2"})
 		}
 		log.Println("Failed to query database:", err)
 		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to retrieve stored hash"})
@@ -116,8 +116,8 @@ func VerifyHash(c echo.Context) error {
 	// Compare the generated hash with the stored hash
 	if hash != storedHash {
 		log.Println("Hash verification failed")
-		return c.JSON(http.StatusUnauthorized, map[string]string{"message": "Hash verification failed"})
+		return c.JSON(http.StatusUnauthorized, map[string]string{"message": "1"})
 	}
 	log.Println("Hash verified successfully")
-	return c.JSON(http.StatusOK, map[string]string{"message": "Hash verified successfully"})
+	return c.JSON(http.StatusOK, map[string]string{"message": "0"})
 }
