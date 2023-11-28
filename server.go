@@ -5,7 +5,6 @@ import (
 	"github.com/justsaumit/go-fis-api/handlers"
 	"github.com/labstack/echo/v4"
 	"log"
-	"fmt"
 	"os"
 )
 
@@ -27,8 +26,6 @@ func main() {
 		domain = "localhost"
 		api_endpoint_url = "http://localhost:3000"
 	}
-	fmt.Println("Domain: " + domain)
-	fmt.Println("API Endpoint URL: " + api_endpoint_url)
 
 	certPath := "/etc/letsencrypt/live/" + domain + "/fullchain.pem"
 	keyPath := "/etc/letsencrypt/live/" + domain + "/privkey.pem"
