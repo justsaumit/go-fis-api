@@ -78,7 +78,7 @@ func AddHash(c echo.Context) error {
 
 func VerifyHash(c echo.Context) error {
 	// Extract the ID from the request
-        id := c.FormValue("idInput")
+	id := c.FormValue("idInput")
 
 	// Handle file upload
 	file, err := c.FormFile("FileInput")
