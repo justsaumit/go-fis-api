@@ -25,26 +25,36 @@ func init() {
 
 	// Create the 'hashes' table if it does not exist
 	_, err = db.Exec(`
-        CREATE TABLE IF NOT EXISTS hashes (
-        ID TEXT PRIMARY KEY,
-        HashValue TEXT NOT NULL
-        );
-    `)
+            CREATE TABLE IF NOT EXISTS hashes (
+            ID TEXT PRIMARY KEY,
+            HashValue TEXT NOT NULL
+            );
+        `)
+	if err != nil {
+		log.Fatalf("Failed to create table: %v", err)
+	}
+}
+
+// handleError handles errors by logging and returning a JSON response
+func handleError(c echo.Context, errMsg string, status int) error {
+	log.Println(errMsg)
+	return c.JSON(status, map[string]string{"message": errMsg})
 }
 
 // AddHash handles the file upload, store and response
-func AddHash(c echo.Context) error {
+func AddHash(c echo.Context) (err error) {
 	file, err := c.FormFile("FileInput")
 	if err != nil {
 		log.Println("Failed to bind request:", err)
 		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid request"})
+		return handleError(c, "Failed to bind request", http.StatusBadRequest)
 	}
 
 	// Open the file stream
 	src, err := file.Open()
 	if err != nil {
 		log.Println("Failed to Open File", err)
-		return err
+		return handleError(c, "Failed to Open File", http.StatusInternalServerError)
 	}
 	// Close the file stream on function exit
 	defer src.Close()
@@ -52,17 +62,22 @@ func AddHash(c echo.Context) error {
 	id, err := utils.GenerateID()
 	if err != nil {
 		log.Println("Failed to Generate ID", err)
+		return handleError(c, "Failed to Generate ID", http.StatusInternalServerError)
 	}
+	log.Printf("ID generated successfully: %s", id)
 
 	hash, err := utils.GenerateHash(src)
 	if err != nil {
 		log.Println("Failed to Generate Hash", err)
+		return handleError(c, "Failed to Generate Hash", http.StatusInternalServerError)
 	}
+	log.Printf("Hash generated successfully: %s", hash)
 
 	// Store id and hash in the database
 	_, err = db.Exec("INSERT INTO hashes (ID, HashValue) VALUES (?, ?)", id, hash)
 	if err != nil {
 		log.Println("Failed to insert into database:", err)
+		return handleError(c, "Failed to insert into database", http.StatusInternalServerError)
 	}
 
 	data := models.FileHashPair{
@@ -70,7 +85,7 @@ func AddHash(c echo.Context) error {
 		FileHash: hash,
 	}
 
-	log.Println("Hash added successfully to the database")
+	log.Println("Hash added to the database successfully: %v", data)
 	return c.JSON(http.StatusOK, data)
 }
 
