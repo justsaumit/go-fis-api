@@ -26,7 +26,7 @@ func main() {
 		port = defaultPort
 	}
 
-	domain, apiEndpointUrl := os.Getenv("DOMAIN")
+	domain := os.Getenv("DOMAIN")
 	api_endpoint_url := os.Getenv("API_ENDPOINT_URL")
 	if domain == "" || api_endpoint_url == "" {
 		log.Println("Warning: DOMAIN and API_ENDPOINT_URL environment variable not set. Using defaults")
