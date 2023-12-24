@@ -1,4 +1,5 @@
 # Golang Backend API for FIS (File Integrity Surveillance) Application
+
 Developing a simple Golang backend API with the [Echo framework](https://github.com/labstack/echo) for FIS(File Integrity Surveillance) application which can be found [here](https://github.com/ayato91/Fair-Files).  
 This API stores IDs and their corresponding hashes in a SQL server and provides functionality to verify if a given hash matches the stored hash for a specific ID. All the communication between the Application and API is secured using TLS encryption(HTTPS).  
 Thereby providing both confidentiality and integrity service that aligns with the CIA (Confidentiality, Integrity, Availability) triad for data security.
@@ -10,7 +11,7 @@ To get started with this project, follow these steps:
 ### Prerequisites
 
 - Go installed on your machine.
-- A SQL database server(sqlite) to store IDs and hashes.
+- A SQL database server (sqlite) to store IDs and hashes.
 
 ### Installation
 
@@ -27,32 +28,61 @@ To get started with this project, follow these steps:
   go mod vendor
   ```
 
-3. Create a configuration file (e.g., config.yaml) to specify your database settings and other configurations.
+3. Create a `.env` file at the root of the project and specify the environment variables. Default values will be used if not set.  
+   For example:
 
-4. Run the server:
+   ```dotenv
+   ENVIRONMENT=production
+   API_ENDPOINT_URL=https://draconyan.xyz:3000
+   DOMAIN=draconyan.xyz
+   PORT=3000
 
-  ```bash
-  go run server.go
-  ```
+   # SSL/TLS Configuration
+   CERTPATH=<path to>/fullchain.pem
+   KEYPATH=<path to>/privkey.pem
+   ```
+
+   If the `.env` file is not set, default values such as `development` and `localhost` will be used where TLS is not required.
+
+4. Run the server using one of the following methods:
+
+   a. **Run with Go (Development Mode):**
+
+      ```bash
+      go run server.go
+      ```
+      This command starts the server using the Go runtime.
+
+   b. **Build and Run:**
+
+      ```bash
+      CGO_ENABLED=1 go build -o main .
+      ./main
+      ```
+      This sequence of commands builds the application and then runs the compiled binary `main`
+
+   c. **Using Docker:**
+
+      With the help of Dockerfile
+      ```bash
+      docker build -t myapp .
+      ```
+      ```bash
+      docker run -p 3000:3000 --env-file .env myapp
+      ```
 
 ### Usage
 
-Once the server is running, you can access the API endpoints to add file hashes and verify them.
-
-- To add a file hash, make a POST request to `/upload` by uploading the file using multipart form, an generated ID and hash would be returned.
-- To verify a file hash, make a POST request to `/verify` with previously generated ID and the file, a JSON message with Hashes matching or not will be recieved as response .
-
-### Usage
-
-Once the server is operational, you can interact with the API endpoints to add and verify file hashes.
+Once the server is running, you can access the API endpoints to upload a file for hashing and verify them.
 
 - **Adding a File Hash:**
-  - To add a file hash, send a POST request to the `/upload` endpoint. You'll need to upload the file using multipart/form-data. The server will generate an ID and a hash for the uploaded file, which will be returned in the response.
+  - To add a file hash to the DB, make a POST request to `/upload` by uploading the file using multipart form. The server will generate an ID and hash for the uploaded file, which will be returned as a JSON response.
 
 - **Verifying a File Hash:**
-  - To verify a file hash, send a POST request to the `/verify` endpoint. Include the previously generated ID as a form field and upload the file using multipart/form-data. The server will respond with a JSON message indicating whether the hash of the uploaded file matches the stored hash for the given ID.
+  - To verify a file hash, make a POST request to `/verify` with the previously generated ID and the file using multipart form. The server will respond with a JSON message indicating whether the hash of the uploaded file (calculatedHash) matches with the hash in the database (storedHash) corresponding to the given ID. It also indicates whether an ID is present in the database or not.
 
 ## To-Do-List
+
 - [x] Handle Uploaded files (API)
 - [x] Perform short ID Generation (API)
 - [x] Perform Hashing (API)

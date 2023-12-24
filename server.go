@@ -34,9 +34,6 @@ func main() {
 		api_endpoint_url = defaultAPIEndpointURL
 	}
 
-	certPath := "/etc/letsencrypt/live/" + domain + "/fullchain.pem"
-	keyPath := "/etc/letsencrypt/live/" + domain + "/privkey.pem"
-
 	e := echo.New()
 	e.POST("/upload", handlers.AddHash)
 	e.POST("/verify", handlers.VerifyHash)
@@ -46,6 +43,8 @@ func main() {
 	case "development":
 		e.Logger.Fatal(e.Start(":" + port))
 	case "production":
+	        certPath := os.Getenv("CERTPATH")
+	        keyPath  := os.Getenv("KEYPATH")
 		e.Logger.Fatal(e.StartTLS(":"+port, certPath, keyPath))
 	default:
 		log.Printf("Unknown environment '%s', starting on default port %s\n", environment, port)
