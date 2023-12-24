@@ -1,4 +1,6 @@
 # Dependency directories
 .env
 vendor/
+# db and compiled binary
 hashstore.db
+main
