@@ -29,7 +29,7 @@ To get started with this project, follow these steps:
   ```
 
 3. Create a `.env` file at the root of the project and specify the environment variables. Default values will be used if not set.  
-   For example:
+   For example (refer to env.example):
 
    ```dotenv
    ENVIRONMENT=production
@@ -37,7 +37,7 @@ To get started with this project, follow these steps:
    DOMAIN=draconyan.xyz
    PORT=3000
 
-   # SSL/TLS Configuration
+   # SSL/TLS Configuration (if running in container, make it /certs/<cert/key>.pem and mount the certificate directory as a volume to /certs)
    CERTPATH=<path to>/fullchain.pem
    KEYPATH=<path to>/privkey.pem
    ```
@@ -59,18 +59,22 @@ To get started with this project, follow these steps:
       CGO_ENABLED=1 go build -o main .
       ./main
       ```
-      This sequence of commands builds the application and then runs the compiled binary `main`
+      This sequence of commands builds the application and then runs the compiled binary `main`.
 
    c. **Using Docker:**
 
-      With the help of Dockerfile
-      ```bash
-      docker build -t myapp .
-      ```
-      ```bash
-      docker run -p 3000:3000 --env-file .env myapp
-      ```
-
+      - With the help of Dockerfile:
+        ```bash
+        docker build -t myapp .
+      - Run the image
+        - For `development` environment:
+        ```bash
+        docker run -p 3000:3000 myapp
+          ```
+        - For `production` environment with specified certificate and private key paths:
+        ```bash
+        docker run -p 3000:3000 -v /path/to/certifcates:/certs myapp
+          ```
 ### Usage
 
 Once the server is running, you can access the API endpoints to upload a file for hashing and verify them.
