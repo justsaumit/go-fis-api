@@ -93,7 +93,8 @@ Once the server is running, you can access the API endpoints to upload a file fo
 - [x] Connect with DB
 - [x] Store JSON data to DB
 - [x] Perform verification
-- [ ] Containerize the API
+- [x] Containerize the API
+- [ ] Optimize Docker Image size (Currently 509MB)
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
