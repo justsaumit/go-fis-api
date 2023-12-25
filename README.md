@@ -69,9 +69,10 @@ To get started with this project, follow these steps:
         ```bash
         docker run -p 3000:3000 myapp
           ```
-        - For `production` environment with specified certificate and private key paths:
+        - For `production` environment with specified certificate and private key paths and persistant storage:
+
         ```bash
-        docker run -p 3000:3000 -v /path/to/certifcates:/certs myapp
+        docker run -p 3000:3000 --env-file .env -v docker-dbvolume:/app -v /path/to/certifcates:/certs myapp
           ```
 ### Usage
 
@@ -92,7 +93,9 @@ Once the server is running, you can access the API endpoints to upload a file fo
 - [x] Store JSON data to DB
 - [x] Perform verification
 - [x] Containerize the API
-- [ ] Optimize Docker Image size (Currently 509MB)
+- [x] Optimize Docker Image size (Previously 509MB, Optimized: 22.2MB)
+- [ ] Create a Github workflow for binary releases and docker image packages
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
