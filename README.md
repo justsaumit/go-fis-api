@@ -33,8 +33,6 @@ To get started with this project, follow these steps:
 
    ```dotenv
    ENVIRONMENT=production
-   API_ENDPOINT_URL=https://draconyan.xyz:3000
-   DOMAIN=draconyan.xyz
    PORT=3000
 
    # SSL/TLS Configuration (if running in container, make it /certs/<cert/key>.pem and mount the certificate directory as a volume to /certs)
