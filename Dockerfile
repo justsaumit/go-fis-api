@@ -8,12 +8,8 @@ RUN go mod download
 
 COPY . .
 
-#Install the build dependencies
-RUN apk add --no-cache gcc libc-dev
-
 # Build the binary
-#CGO_ENABLED=1 for go-sqlite3 to work
-RUN CGO_ENABLED=1 go build -o main .
+RUN go build -o main .
 
 # Runner Stage
 FROM alpine:latest
