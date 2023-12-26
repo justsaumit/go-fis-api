@@ -24,6 +24,7 @@ func main() {
 	}
 
 	e := echo.New()
+	e.GET("/", handlers.HealthCheck)
 	e.POST("/upload", handlers.AddHash)
 	e.POST("/verify", handlers.VerifyHash)
 

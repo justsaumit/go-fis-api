@@ -35,6 +35,10 @@ func init() {
 	}
 }
 
+func HealthCheck(c echo.Context) error {
+	return c.JSON(http.StatusOK, map[string]string{"message": "API is running!"})
+}
+
 // handleError handles errors by logging and returning a JSON response
 func handleError(c echo.Context, errMsg string, status int) error {
 	log.Println(errMsg)
