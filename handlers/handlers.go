@@ -5,7 +5,7 @@ import (
 	"github.com/justsaumit/go-fis-api/models"
 	"github.com/justsaumit/go-fis-api/utils"
 	"github.com/labstack/echo/v4"
-	_ "github.com/mattn/go-sqlite3"
+	_ "modernc.org/sqlite"
 	"log"
 	"net/http"
 )
@@ -14,7 +14,7 @@ var db *sql.DB
 
 func init() {
 	var err error
-	db, err = sql.Open("sqlite3", "hashstore.db")
+	db, err = sql.Open("sqlite", "hashstore.db")
 	if err != nil {
 		log.Fatalf("sqlite3 not installed: %v", err)
 	}

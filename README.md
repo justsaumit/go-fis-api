@@ -94,7 +94,7 @@ Once the server is running, you can access the API endpoints to upload a file fo
 - [x] Perform verification
 - [x] Containerize the API
 - [x] Optimize Docker Image size (Previously 509MB, Optimized: 22.2MB)
-- [ ] Rewrite db interaction to exclude go-sqlite3 and utilize a pure Go database library (avoiding CGO cross-compilation errors)
+- [x] Exclude [go-sqlite3](https://pkg.go.dev/github.com/mattn/go-sqlite3) as the SQLite3 driver in favor of a CGO-free port written in pure Go - [modernc-sqlite](https://pkg.go.dev/modernc.org/sqlite) (to avoid CGO cross-compilation errors)
 - [ ] Create a Github workflow for binary releases and docker image packages
 
 ## License
