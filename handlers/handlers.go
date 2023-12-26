@@ -5,8 +5,8 @@ import (
 	"github.com/justsaumit/go-fis-api/models"
 	"github.com/justsaumit/go-fis-api/utils"
 	"github.com/labstack/echo/v4"
-	_ "modernc.org/sqlite"
 	"log"
+	_ "modernc.org/sqlite"
 	"net/http"
 )
 

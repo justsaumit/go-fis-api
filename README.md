@@ -54,7 +54,7 @@ To get started with this project, follow these steps:
    b. **Build and Run:**
 
       ```bash
-      CGO_ENABLED=1 go build -o main .
+      go build -o main .
       ./main
       ```
       This sequence of commands builds the application and then runs the compiled binary `main`.
