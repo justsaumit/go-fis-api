@@ -4,3 +4,5 @@ vendor/
 # db and compiled binary
 hashstore.db
 main
+
+dist/
