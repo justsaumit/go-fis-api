@@ -15,65 +15,76 @@ To get started with this project, follow these steps:
 
 ### Installation
 
-1. Clone this repository to your local machine:
+**1. Clone this repository:**
 
-  ```bash
-  git clone https://github.com/justsaumit/go-fis-api.git
-  cd go-fis-api
-  ```
+```bash
+git clone https://github.com/justsaumit/go-fis-api.git
+cd go-fis-api
+```
 
-2. Initialize and install project dependencies using Go modules:
+**2. Initialize project dependencies:**
 
-  ```bash
-  go mod vendor
-  ```
+```bash
+go mod vendor
+```
 
-3. Create a `.env` file at the root of the project and specify the environment variables. Default values will be used if not set.  
-   For example (refer to env.example):
+**3. Configure environment variables (optional):**
 
-   ```dotenv
-   ENVIRONMENT=production
-   PORT=3000
+- Create a `.env` file at the root of the project and specify environment variables.
+- For example (refer to env.example):
 
-   # SSL/TLS Configuration (if running in container, make it /certs/<cert/key>.pem and mount the certificate directory as a volume to /certs)
-   CERTPATH=<path to>/fullchain.pem
-   KEYPATH=<path to>/privkey.pem
-   ```
+```dotenv
+ENVIRONMENT=<development or production>
+PORT=3000
 
-   If the `.env` file is not set, default values such as `development` and `localhost` will be used where TLS is not required.
+# SSL/TLS Configuration (if running in container, make it /certs/<cert/key>.pem and mount the certificate directory as a volume to /certs)
+CERTPATH=<path to>/fullchain.pem
+KEYPATH=<path to>/privkey.pem
+```
 
-4. Run the server using one of the following methods:
+**4. Run the server:**
 
-   a. **Run with Go (Development Mode):**
+**Option A: Run with Go (Development Mode):**
 
-      ```bash
-      go run server.go
-      ```
-      This command starts the server using the Go runtime.
+```bash
+go run server.go
+```
 
-   b. **Build and Run:**
+**Option B: Build and Run:**
 
-      ```bash
-      go build -o main .
-      ./main
-      ```
-      This sequence of commands builds the application and then runs the compiled binary `main`.
+```bash
+go build -o main .
+./main
+```
 
-   c. **Using Docker:**
+**Option C: Using Docker:**
 
-      - With the help of Dockerfile:
-        ```bash
-        docker build -t myapp .
-      - Run the image
-        - For `development` environment:
-        ```bash
-        docker run -p 3000:3000 myapp
-          ```
-        - For `production` environment with specified certificate and private key paths and persistant storage:
+**a. Build the image (if using Dockerfile):**
 
-        ```bash
-        docker run -p 3000:3000 --env-file .env -v docker-dbvolume:/app -v /path/to/certifcates:/certs myapp
-          ```
+```bash
+docker build -t myapp .
+```
+
+**b. Pull the prebuilt image (alternative):**
+
+```bash
+docker pull ghcr.io/justsaumit/go-fis-api:latest
+```
+
+**c. Run the container:**
+
+- **Development:**
+
+```bash
+docker run -p 3000:3000 myapp
+```
+
+- **Production (with certificates and persistent storage):**
+
+```bash
+docker run -p 3000:3000 --env-file .env -v docker-dbvolume:/app -v /path/to/certifcates:/certs myapp
+```
+
 ### Usage
 
 Once the server is running, you can access the API endpoints to upload a file for hashing and verify them.
