@@ -1,5 +1,8 @@
 # Golang Backend API for FIS (File Integrity Surveillance) Application
 
+[![Docker Image CI for GHCR](https://github.com/justsaumit/go-fis-api/actions/workflows/publish-ghcr.yml/badge.svg)](https://github.com/justsaumit/go-fis-api/actions/workflows/publish-ghcr.yml)
+[![Go-Releaser](https://github.com/justsaumit/go-fis-api/actions/workflows/go-releaser.yml/badge.svg)](https://github.com/justsaumit/go-fis-api/actions/workflows/go-releaser.yml)
+
 Developing a simple Golang backend API with the [Echo framework](https://github.com/labstack/echo) for FIS(File Integrity Surveillance) application which can be found [here](https://github.com/ayato91/Fair-Files).  
 This API stores IDs and their corresponding hashes in a SQL server and provides functionality to verify if a given hash matches the stored hash for a specific ID. All the communication between the Application and API is secured using TLS encryption(HTTPS).  
 Thereby providing both confidentiality and integrity service that aligns with the CIA (Confidentiality, Integrity, Availability) triad for data security.
