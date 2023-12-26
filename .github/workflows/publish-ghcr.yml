@@ -1,0 +1,29 @@
+name: Docker Image CI for GHCR
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build_and_publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GH_TOKEN }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/go-fis-api:${{ github.ref_name }}
+            ghcr.io/${{ github.repository_owner }}/go-fis-api:latest
